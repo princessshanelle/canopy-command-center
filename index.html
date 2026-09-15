@@ -1,0 +1,434 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f2b15f"><link rel="manifest" href="manifest.json">
+<title>Canopy — Personal Command Center</title>
+<style>
+:root{--bg:#fff8ed;--card:#fffdf8;--ink:#352c25;--muted:#8b7868;--line:#eadaca;--orange:#efad60;--green:#79a879;--soft:#f8ead7;--shadow:0 10px 28px #80633a18}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{display:grid;grid-template-columns:235px 1fr;min-height:100vh}
+aside{background:#fffaf2;border-right:1px solid var(--line);padding:20px 14px;position:sticky;top:0;height:100vh}.brand{display:flex;gap:10px;align-items:center;padding:4px 8px 22px}.brandicon{width:40px;height:40px;border-radius:14px;background:var(--orange);display:grid;place-items:center;font-size:22px}.brand h1{margin:0;font-size:23px}.brand small{color:var(--muted)}
+nav{display:grid;gap:5px}nav button{border:0;background:none;text-align:left;padding:11px 12px;border-radius:13px;color:#66574b}nav button.active,nav button:hover{background:#f5e3cb;color:var(--ink);font-weight:700}
+.side{position:absolute;bottom:15px;left:14px;right:14px;text-align:center;background:#f9ead8;border-radius:17px;padding:12px;font-size:12px}.side .spr{font-size:27px}
+main{padding:24px;max-width:1450px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:20px}.top h2{margin:0;font-size:28px}.top p{margin:4px 0;color:var(--muted)}.actions{display:flex;gap:7px;flex-wrap:wrap}.search{max-width:300px}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:9px 13px}.primary{background:var(--orange);border-color:var(--orange);font-weight:700}.green{background:#dcebd8;border-color:#c5ddc1}
+.page{display:none}.page.active{display:block}.grid{display:grid;gap:15px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:var(--card);border:1px solid var(--line);border-radius:21px;padding:17px;box-shadow:var(--shadow)}.card h3{margin:0 0 11px}.muted,.tiny{color:var(--muted)}.tiny{font-size:12px}
+.hero{display:grid;grid-template-columns:1fr 250px;gap:15px;margin-bottom:15px}.heroText{padding:23px;background:linear-gradient(135deg,#fffdf7,#f8e9d5)}.heroText h1{font-size:34px;margin:6px 0}.heroText p{line-height:1.55;max-width:680px;color:#6c5e52}.quote{font-weight:700;margin-top:18px}
+.mascotBox{display:grid;place-items:center;min-height:260px;overflow:hidden;background:#fff6e8;position:relative}.mascotStage{display:grid;justify-items:center;gap:7px}.mascotBubble{background:#fffdf8;border:1px solid var(--line);box-shadow:0 8px 18px #80633a18;border-radius:16px;padding:8px 11px;font-size:12px;font-weight:700;max-width:190px;text-align:center;position:relative}.mascotBubble:after{content:"";position:absolute;left:50%;bottom:-7px;width:13px;height:13px;background:#fffdf8;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateX(-50%) rotate(45deg)}.mascot{position:relative;width:165px;height:180px;animation:bob 3s ease-in-out infinite;cursor:pointer;transition:filter .2s,transform .2s}.mascot:hover{filter:brightness(1.04);transform:translateY(-4px)}.tail{position:absolute;left:104px;top:120px;width:46px;height:34px;background:var(--fur,#efb36f);border:3px solid #4b392d;border-radius:50% 60% 55% 45%;z-index:0;transform-origin:20% 60%;animation:tailwag 2.6s ease-in-out infinite}.tail:before{content:"";position:absolute;right:2px;top:6px;width:16px;height:14px;background:#fff8ee;border-radius:50%}.head{position:absolute;left:24px;top:26px;width:118px;height:96px;background:var(--fur,#efb36f);border:3px solid #4b392d;border-radius:44% 44% 46% 46%/58% 58% 42% 42%;z-index:3;box-shadow:inset 0 -8px rgba(0,0,0,.07)}.muzzle{position:absolute;left:27px;top:54px;width:64px;height:42px;background:#fff8ee;border:2px solid #4b392d55;border-radius:48% 48% 50% 50%/60% 60% 40% 40%;z-index:4}.ear{position:absolute;top:-10px;width:30px;height:48px;background:var(--fur,#efb36f);border:3px solid #4b392d;clip-path:polygon(50% 0%,4% 100%,96% 100%);z-index:2}.ear:before{content:"";position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:13px;height:22px;background:#ffe3c2;clip-path:polygon(50% 0%,10% 100%,90% 100%)}.ear.a{left:8px;transform:rotate(-16deg)}.ear.b{right:8px;transform:rotate(16deg)}.eye{position:absolute;top:34px;width:16px;height:18px;background:#3a2c22;border-radius:50%;z-index:5;transition:height .15s;box-shadow:0 0 0 3px #fff8ee inset}.eye:after{content:"";position:absolute;left:2px;top:2px;width:5px;height:5px;background:#fff;border-radius:50%}.eye.a{left:35px}.eye.b{right:35px}.eye.blink{height:2px;top:42px;border-radius:2px}.eye.blink:after{display:none}.brow{position:absolute;top:25px;width:16px;height:4px;background:#4b392d;border-radius:3px;z-index:5;transition:transform .2s}.brow.a{left:35px}.brow.b{right:35px}.nose{position:absolute;left:54px;top:64px;width:10px;height:8px;background:#4b392d;border-radius:50% 50% 60% 60%;z-index:5}.mouth{position:absolute;left:49px;top:75px;width:20px;height:9px;border-bottom:3px solid #4b392d;border-radius:0 0 20px 20px;background:transparent;z-index:5}.blush{position:absolute;top:60px;width:15px;height:8px;background:#e88e77aa;border-radius:50%;z-index:5}.blush.a{left:5px}.blush.b{right:5px}.body{position:absolute;left:32px;top:110px;width:104px;height:62px;background:var(--fur,#efb36f);border:3px solid #4b392d;border-radius:46% 46% 50% 50%/60% 60% 40% 40%;z-index:2}.body:before{content:"";position:absolute;left:26px;top:10px;width:52px;height:38px;background:#fff8ee;border-radius:50% 50% 55% 55%/60% 60% 40% 40%;border-top:2px solid #4b392d22}.body:after{content:"🌿";position:absolute;left:38px;top:16px;font-size:15px;z-index:1}.arm{position:absolute;top:126px;width:30px;height:16px;background:var(--fur,#efb36f);border:3px solid #4b392d;border-radius:10px;z-index:1}.arm.a{left:8px;transform:rotate(10deg)}.arm.b{right:8px;transform:rotate(-10deg)}.paw{position:absolute;top:150px;width:27px;height:21px;background:var(--fur,#efb36f);border:3px solid #4b392d;border-radius:11px;z-index:4}.paw.a{left:22px}.paw.b{right:22px}.leaf{position:absolute;top:-24px;left:83px;font-size:26px;animation:sway 2s ease-in-out infinite;transform-origin:bottom center;z-index:6;transform:translateX(-50%)}.leaf:before{content:"";position:absolute;left:50%;bottom:-13px;width:3px;height:15px;background:#4b392d;transform:translateX(-50%);z-index:-1}.mascotTools{display:flex;gap:5px;position:absolute;bottom:9px;left:50%;transform:translateX(-50%);z-index:8}.mascotTools button{border:1px solid var(--line);background:#fffdf8;border-radius:99px;padding:6px 8px;font-size:11px}.petPanel{margin-top:8px;width:100%;max-width:310px;background:#fffdf8;border:1px solid var(--line);border-radius:18px;padding:10px}.petStats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.petStat{font-size:10px;color:var(--muted)}.petBar{height:7px;background:#eee2d4;border-radius:99px;overflow:hidden;margin-top:4px}.petBar i{display:block;height:100%;width:50%;background:var(--green);transition:width .35s}.petActions{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.petActions button{border:1px solid var(--line);background:#fff8ee;border-radius:11px;padding:7px 8px;font-size:11px}.petActions button:hover{transform:translateY(-1px);background:#f5e4cd}.food{display:flex;gap:5px;align-items:center;justify-content:space-between;margin-top:8px;font-size:11px}.petHeart{position:absolute;font-size:20px;animation:heartFloat 1s ease-out forwards;pointer-events:none;z-index:20}@keyframes heartFloat{0%{opacity:0;transform:translateY(10px) scale(.6)}25%{opacity:1}100%{opacity:0;transform:translateY(-45px) scale(1.15)}}.petSleep{animation:sleepBob 2.2s ease-in-out infinite!important}.zzz{position:absolute;right:2px;top:20px;font-size:18px;animation:zzz 2s ease-in-out infinite;z-index:20}@keyframes zzz{50%{transform:translate(8px,-8px);opacity:.4}}@keyframes sleepBob{50%{transform:translateY(3px) scale(.99)}}.mascot.happy .mouth{border-radius:0 0 24px 24px;height:10px}.mascot.excited{animation:hop .55s ease-in-out 3}.mascot.excited .tail{animation:tailwag .5s ease-in-out infinite}.mascot.sleepy .eye{height:2px;top:42px;border-radius:2px}.mascot.sleepy .eye:after{display:none}.mascot.sleepy .mouth{width:12px;height:4px;border-bottom:3px solid #4b392d;border-radius:0 0 10px 10px}.mascot.wink .eye.b{height:2px;top:42px;border-radius:2px}.mascot.wink .eye.b:after{display:none}.mascot.wink .mouth{border-radius:0 0 20px 20px;height:9px}.mascot.sad .brow.a{transform:rotate(-16deg) translateY(-2px)}.mascot.sad .brow.b{transform:rotate(16deg) translateY(-2px)}.mascot.sad .mouth{border:0;border-top:3px solid #4b392d;border-radius:20px 20px 0 0;height:7px;top:78px}@keyframes hop{50%{transform:translateY(-13px) rotate(2deg)}}@keyframes tailwag{50%{transform:rotate(-14deg)}}
+.acc{position:absolute;font-size:26px;display:none;z-index:9;filter:drop-shadow(0 2px 2px #0002)}
+.acc-headphones{top:10px;left:20px;font-size:46px}
+.acc-owl{top:114px;left:-8px;font-size:26px;transform:rotate(-8deg)}
+.acc-dumbbell{top:158px;right:-10px;font-size:24px;transform:rotate(18deg)}
+.acc-rocket{top:112px;right:-10px;font-size:24px;transform:rotate(14deg)}
+.acc-briefcase{top:128px;left:40px;font-size:22px}
+.mascot.eq-headphones .acc-headphones,.mascot.eq-owl .acc-owl,.mascot.eq-dumbbell .acc-dumbbell,.mascot.eq-rocket .acc-rocket,.mascot.eq-briefcase .acc-briefcase{display:block}
+.swatches{display:flex;gap:8px;margin:6px 0 2px}
+.swatch{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
+.swatch.active{border-color:var(--ink);box-shadow:0 0 0 2px #fff inset}
+.acctoggle{display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid var(--line);font-size:13px}
+.acctoggle:last-child{border-bottom:0}
+.acctoggle.locked{opacity:.45}
+#mascot{transform:scale(1.5);transform-origin:center bottom}
+@keyframes bob{50%{transform:translateY(-5px)}}@keyframes sway{50%{transform:rotate(9deg) scale(1.06)}}.grow2{transform:scale(1.08)}.grow3{transform:scale(1.17)}.grow4{transform:scale(1.27)}
+.stat{min-height:120px}.stat .label{color:var(--muted)}.stat .num{font-size:30px;font-weight:800;margin:7px 0}.tag{display:inline-block;font-size:11px;padding:4px 8px;border-radius:99px;background:#f3e6d7;margin:2px}.high{background:#f6d1c3}.gt{background:#dcebd8}.item{display:flex;gap:9px;align-items:flex-start;padding:10px;border:1px solid #eee0d0;border-radius:14px;background:#fffdf9}.grow{flex:1}.list{display:grid;gap:8px}.check{accent-color:var(--green);width:19px;height:19px;margin-top:2px}.section{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:11px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:9px;background:#fffdf9;color:var(--ink)}textarea{min-height:95px;resize:vertical}label{display:grid;gap:5px;font-size:13px}.form{display:grid;gap:10px}.form2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px}.tab{border:1px solid var(--line);background:#fffaf2;border-radius:99px;padding:7px 11px}.tab.active{background:#f1ddc2;font-weight:700}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day{min-height:105px;border:1px solid var(--line);border-radius:13px;padding:8px;background:#fffdf9}.day.today{outline:2px solid var(--orange)}.day b{font-size:13px}.dot{font-size:10px;background:#f6eadc;padding:3px 5px;border-radius:7px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.progress{height:8px;background:#eee1d2;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:var(--green)}
+.heat{display:grid;grid-template-columns:repeat(14,1fr);gap:5px}.heat span{aspect-ratio:1;border-radius:4px;background:#eee5da}.heat .l1{background:#e1efd9}.heat .l2{background:#b9d5ab}.heat .l3{background:#8eb880}.heat .l4{background:#638f69}
+.timer{font-size:58px;text-align:center;font-weight:900;margin:18px 0}.center{text-align:center}.modal{position:fixed;inset:0;background:#352c2555;display:none;place-items:center;padding:15px;z-index:20}.modal.open{display:grid}.modalbox{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:19px;max-width:600px;width:100%;max-height:90vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center}.x{border:0;background:#f1e4d6;border-radius:50%;width:32px;height:32px}
+/* Navigation scroll fix: keep every section reachable on shorter tablets. */
+aside nav{max-height:calc(100vh - 170px);overflow-y:auto;overflow-x:hidden;padding-right:4px;scroll-behavior:smooth;overscroll-behavior-y:contain}
+aside nav::-webkit-scrollbar{width:6px}
+aside nav::-webkit-scrollbar-thumb{background:#ddc8ad;border-radius:99px}
+@media (min-width:761px) and (max-width:1180px){aside nav{max-height:calc(100vh - 145px)}}
+@media(max-width:900px){.app{grid-template-columns:1fr}aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:10px}.brand{padding-bottom:9px}aside nav{max-height:none;overflow-x:auto;overflow-y:hidden;padding-right:0}nav{display:flex;overflow:auto}nav button{white-space:nowrap}.side{display:none}.hero{grid-template-columns:1fr}.g4{grid-template-columns:repeat(2,1fr)}main{padding:14px}}
+@media(max-width:550px){.g2,.g4{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.form2{grid-template-columns:1fr}.calendar{grid-template-columns:repeat(2,1fr)}}
+
+/* Tablet pass: keep every Canopy page readable at 768–1180px widths. */
+@media (min-width:551px) and (max-width:1180px){
+  .app{grid-template-columns:190px 1fr}
+  aside{padding:16px 10px}
+  .brand{padding-left:6px;padding-right:4px}
+  .brand h1{font-size:20px}
+  .brand small{font-size:11px}
+  nav button{padding:10px 9px;font-size:13px}
+  main{padding:18px;max-width:none}
+  .top{align-items:flex-start}
+  .top h2{font-size:25px}
+  .search{max-width:220px}
+  .hero{grid-template-columns:minmax(0,1fr) 220px}
+  .heroText{padding:20px}
+  .heroText h1{font-size:30px}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card{min-width:0}
+  .calendar{gap:5px}
+  .day{min-height:88px;padding:7px}
+  .day .dot{white-space:normal;line-height:1.2}
+  .heat{gap:4px}
+  .item{min-width:0}
+  .item>div{min-width:0}
+  .item b{overflow-wrap:anywhere}
+  .form2{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  aside{position:relative;height:auto}
+  nav{display:flex;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+  nav button{white-space:nowrap;flex:0 0 auto}
+  .side{display:none}
+  main{padding:14px}
+  .top{flex-wrap:wrap}
+  .actions{width:100%}
+  .search{max-width:none;flex:1;min-width:180px}
+  .hero{grid-template-columns:1fr}
+}
+
+/* Canopy comfortable tablet/mobile layout
+   Designed for touch: readable text, generous spacing, and a calm visual hierarchy. */
+html{font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-size:16px;line-height:1.5}
+button,input,select,textarea{font-size:16px}
+.btn{min-height:46px;padding:10px 15px;border-radius:13px}
+nav button{min-height:46px;font-size:15px;padding:11px 13px}
+.tiny{font-size:14px;line-height:1.45}
+.card{padding:20px}
+.card h3{font-size:20px}
+.top h2{font-size:30px}
+.top p{font-size:15px}
+.search{min-height:46px;padding:10px 13px}
+input,select,textarea{min-height:46px;padding:10px 12px}
+
+@media (min-width:761px) and (max-width:1180px){
+  .app{grid-template-columns:230px minmax(0,1fr)}
+  aside{padding:18px 12px}
+  .brand{padding:4px 8px 18px}
+  .brand h1{font-size:23px}
+  .brand small{font-size:12px}
+  nav{gap:7px}
+  nav button{font-size:16px;min-height:48px;padding:12px 13px}
+  main{padding:24px;max-width:none}
+  .top{margin-bottom:24px}
+  .top h2{font-size:30px}
+  .hero{grid-template-columns:minmax(0,1fr) 270px;gap:18px}
+  .heroText{padding:26px}
+  .heroText h1{font-size:34px;line-height:1.15}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .g2{gap:18px}
+  .card{border-radius:18px;padding:21px}
+  .stat .num{font-size:30px}
+}
+
+@media (max-width:760px){
+  main{padding:16px}
+  .brand{padding-bottom:12px}
+  nav{gap:7px}
+  nav button{font-size:16px;min-height:48px;padding:12px 14px}
+  .top{gap:12px;margin-bottom:18px}
+  .top h2{font-size:27px}
+  .actions{gap:9px}
+  .actions .btn{flex:1 1 auto}
+  .search{width:100%;max-width:none;min-width:0;flex:1 0 100%}
+  .heroText h1{font-size:30px;line-height:1.18}
+  .card{padding:18px;border-radius:17px}
+}
+
+/* Comfortable tap targets. WCAG guidance recommends generous touch targets. */
+.btn,nav button,input,select,textarea{touch-action:manipulation}
+
+/* Visual polish pass: clear hierarchy, refined icons, spacious cards, and tablet-friendly controls. */
+:root{--ink:#2f2924;--muted:#77695d;--line:#e6d5c2;--card:#fffdf9;--bg:#fbf5ec;--orange:#eaa75a;--green:#72a56e;--soft:#f5e6d4;--shadow:0 12px 30px rgba(78,55,29,.08)}
+body{background:radial-gradient(circle at 15% 0%,#fffaf1 0,#fbf5ec 42%,#f8f0e5 100%);letter-spacing:.01em}
+svg.icon,svg.navIcon{width:20px;height:20px;display:inline-block;vertical-align:-4px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 3px 10px rgba(78,55,29,.04);transition:transform .15s,box-shadow .15s,background .15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 7px 16px rgba(78,55,29,.09)}
+.app{grid-template-columns:240px minmax(0,1fr)}
+aside{background:rgba(255,251,244,.92);backdrop-filter:blur(10px);box-shadow:8px 0 30px rgba(78,55,29,.035)}
+.brandicon{box-shadow:0 7px 18px rgba(210,139,62,.2)}
+nav button{display:flex;align-items:center;gap:12px;font-weight:600;transition:all .18s}
+nav button .navIcon{flex:0 0 21px}
+nav button.active{box-shadow:inset 3px 0 var(--orange),0 5px 15px rgba(78,55,29,.05)}
+main{padding:28px 30px 40px}
+.top h2{letter-spacing:-.025em}
+.top p{font-size:15px}
+.card{box-shadow:var(--shadow);border-color:rgba(205,181,154,.65);transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:0 15px 35px rgba(78,55,29,.10)}
+.heroText{background:linear-gradient(135deg,#fffefa 0%,#fbecd9 100%)}
+.stat{position:relative;overflow:hidden}.stat:after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;right:-32px;top:-35px;background:#f7ead8;opacity:.7}
+.stat .num{position:relative;z-index:1}
+.item{padding:13px;border-radius:16px;box-shadow:0 2px 8px rgba(78,55,29,.03)}
+input,select,textarea{box-shadow:inset 0 1px 2px rgba(78,55,29,.025);transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#d7a260;box-shadow:0 0 0 3px rgba(234,167,90,.16)}
+.tab{display:inline-flex;align-items:center;justify-content:center;min-height:42px;font-weight:600;transition:all .15s}.tab:hover{transform:translateY(-1px)}
+.calendar .day{box-shadow:0 3px 10px rgba(78,55,29,.035)}
+.day.today{box-shadow:0 0 0 2px var(--orange),0 5px 15px rgba(234,167,90,.12)}
+@media (min-width:761px) and (max-width:1180px){main{padding:24px}.app{grid-template-columns:235px minmax(0,1fr)}.card{padding:22px}.top{margin-bottom:22px}}
+@media (max-width:760px){aside{box-shadow:none}.brandicon{width:42px;height:42px}.navIcon{width:22px!important;height:22px!important}main{padding:18px 16px 30px}.card{box-shadow:0 8px 22px rgba(78,55,29,.07)}}
+
+/* Watch page: polished Explore actions */
+.watch-explore{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:112px;padding:10px 15px;border-radius:14px;border:1px solid #e2c39c;background:linear-gradient(135deg,#fff8ec,#f8e2c5);color:#5b4029;text-decoration:none;font-weight:800;box-shadow:0 5px 14px rgba(111,78,42,.10);transition:transform .16s ease,box-shadow .16s ease,background .16s ease}
+.watch-explore:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(111,78,42,.16);background:linear-gradient(135deg,#fffaf2,#f3d8b3)}
+.watch-explore:active{transform:translateY(0)}
+.watch-explore svg{width:18px;height:18px;flex:none}
+@media(max-width:720px){.watch-explore{min-width:104px;padding:10px 13px}}
+
+/* Canopy 2.0 — simple tablet-first usability layer */
+:root{--bg:#f7f4ee;--card:#ffffff;--ink:#2f2924;--muted:#74695f;--line:#e7ddd0;--orange:#e9a45b;--green:#6f9f73;--soft:#f4eadc;--shadow:0 8px 24px rgba(75,57,40,.08)}
+body{font-size:16px;line-height:1.45;background:linear-gradient(180deg,#fbf8f2 0%,#f5f1ea 100%)}
+.app{grid-template-columns:252px minmax(0,1fr)}
+aside{padding:22px 16px;background:rgba(255,252,247,.96);box-shadow:6px 0 24px rgba(75,57,40,.04);z-index:5}
+.brand{padding:2px 8px 24px}.brandicon{width:44px;height:44px;border-radius:15px;box-shadow:0 5px 14px rgba(111,78,42,.12)}.brand h1{font-size:24px;letter-spacing:-.3px}.brand small{font-size:12px}
+nav{gap:3px}nav .navGroup{margin:7px 6px 2px;padding:7px 8px 3px;color:#9a8878;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}nav button{min-height:46px;padding:10px 12px;display:flex;align-items:center;gap:11px;font-size:15px;border-radius:14px;transition:background .16s ease,transform .16s ease}nav button:hover{transform:translateX(1px)}nav button.active{box-shadow:inset 3px 0 0 var(--orange)}.navIcon{width:20px;height:20px;flex:none;stroke-width:2}
+.side{left:16px;right:16px;bottom:18px;padding:13px;border:1px solid var(--line);box-shadow:0 6px 18px rgba(75,57,40,.05)}
+main{padding:28px 30px 42px;max-width:1500px}.top{position:sticky;top:0;z-index:4;padding:4px 0 18px;margin-bottom:2px;background:linear-gradient(180deg,#fbf8f2 72%,rgba(251,248,242,0));backdrop-filter:blur(5px)}.top h2{font-size:30px;letter-spacing:-.5px}.top p{font-size:14px}.search{min-height:46px;width:min(300px,34vw);border-radius:14px;border:1px solid var(--line);padding:0 14px;background:#fff}.actions{align-items:center}.btn{min-height:44px;border-radius:13px;padding:9px 14px;font-weight:650;transition:transform .15s ease,box-shadow .15s ease,background .15s ease}.btn:hover{transform:translateY(-1px);box-shadow:0 5px 13px rgba(75,57,40,.08)}.btn:active{transform:translateY(0)}.primary{box-shadow:0 5px 13px rgba(185,118,47,.13)}
+.page.active{animation:pageIn .18s ease}@keyframes pageIn{from{opacity:.65;transform:translateY(3px)}to{opacity:1;transform:none}}
+.grid{gap:18px}.card{border-radius:18px;padding:20px;box-shadow:var(--shadow)}.card h3{font-size:18px}.muted{font-size:14px}.tiny{font-size:13px}.section{gap:12px;align-items:center}.hero{grid-template-columns:minmax(0,1fr) 280px;gap:18px}.heroText{padding:28px;background:linear-gradient(135deg,#fffefa,#f7ead9);border-color:#e8d7c4}.heroText h1{font-size:clamp(30px,3.1vw,42px);line-height:1.08;letter-spacing:-1px}.heroText p{font-size:16px}.stat{min-height:125px;display:flex;flex-direction:column;justify-content:center}.stat .label{font-size:13px;color:var(--muted);font-weight:700}.stat .num{font-size:31px;font-weight:800;margin:4px 0}
+.list{gap:9px}.item{min-height:58px;padding:11px 12px;border-radius:14px;border:1px solid #eee3d7;background:#fff;transition:background .15s ease,border-color .15s ease}.item:hover{background:#fffaf3;border-color:#e5d5c3}.check{width:21px;height:21px;flex:none}.tag{padding:4px 8px;border-radius:99px;font-size:11px;font-weight:750;background:#f3eee7}.tabs{gap:7px;flex-wrap:wrap}.tab{min-height:42px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:650}.tab.active{background:#f5e3cb;border-color:#e4c69f;color:#513d2d}
+input,select,textarea{min-height:46px;border:1px solid var(--line);border-radius:13px;padding:10px 12px;background:#fff;color:var(--ink);outline:none}textarea{min-height:150px}.form{gap:12px}.form label{font-size:13px;font-weight:700;color:#675b50}.form input,.form select,.form textarea{margin-top:5px}.calendar{gap:8px}.calendar>div{border-radius:12px}
+.watch-explore{min-height:44px;min-width:116px}
+/* Keep touch targets comfortable without making the UI bulky. */
+@media (pointer:coarse){button,.btn,.tab,input,select{min-height:46px}nav button{min-height:50px}.check{width:24px;height:24px}}
+@media(max-width:1100px){.app{grid-template-columns:220px 1fr}main{padding:24px}.hero{grid-template-columns:1fr 240px}.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:820px){.app{display:block}aside{position:sticky;top:0;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:10px 12px}.brand{padding:3px 5px 9px}.brandicon{width:38px;height:38px}.brand h1{font-size:21px}.brand small{display:none}nav{display:flex;gap:5px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}nav::-webkit-scrollbar{display:none}nav .navGroup{display:none}nav button{min-width:max-content;min-height:44px;padding:8px 12px}.navIcon{width:18px;height:18px}.side{display:none}main{padding:18px 14px 30px}.top{position:static;display:block;padding-bottom:12px}.top .actions{margin-top:10px}.search{width:100%;max-width:none}.top .actions .primary{flex:1}.hero{grid-template-columns:1fr}.heroText{padding:22px}.heroText h1{font-size:31px}.g2{grid-template-columns:1fr}.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){main{padding:14px 11px 24px}.card{padding:16px;border-radius:16px}.g4{grid-template-columns:1fr 1fr;gap:10px}.stat{min-height:105px}.stat .num{font-size:27px}.top h2{font-size:26px}.heroText h1{font-size:28px}.heroText p{font-size:15px}.actions{width:100%}.actions .btn{flex:1}.section{align-items:flex-start}.section .actions{width:auto}.watch-explore{min-width:104px}}
+@media(min-width:821px) and (max-width:1200px){main{padding-left:24px;padding-right:24px}.search{width:240px}}
+</style></head><body><svg aria-hidden="true" width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h11"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+<symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v2h4v-2"/></symbol>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 4C10 4 4 8 4 15c0 3 2 5 5 5 7 0 11-6 11-16Z"/><path d="M4 20c3-5 7-8 12-10"/></symbol>
+<symbol id="i-focus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2M12 2v2M12 20v2M2 12h2M20 12h2"/></symbol>
+<symbol id="i-paw" viewBox="0 0 24 24"><path d="M8.5 13.5c-2 0-3.5 1.5-3.5 3.2C5 18.8 7 20 12 20s7-1.2 7-3.3c0-1.7-1.5-3.2-3.5-3.2-1.5 0-2.4.8-3.5.8s-2-.8-3.5-.8Z"/><circle cx="6.5" cy="8" r="2"/><circle cx="11" cy="5.5" r="2"/><circle cx="17.5" cy="8" r="2"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2Z"/><path d="M19 17v5M21.5 19.5h-5"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7L8 5Z"/><path d="M4 5v14"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/><path d="M3 12h2M19 12h2M12 3v2M12 19v2M5.6 5.6L7 7M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></symbol>
+<symbol id="i-message" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 9 9 0 0 1-4-.9L4 20l1.2-3.2A7.3 7.3 0 0 1 4.5 12 7.5 7.5 0 0 1 12 4.5a7.5 7.5 0 0 1 8 7Z"/></symbol>
+</defs></svg>
+<div class="app"><aside><div class="brand"><div class="brandicon">🌱</div><div><h1>Canopy</h1><small>personal command center</small></div></div>
+<nav id="nav">
+<div class="navGroup">Plan</div>
+<button class="active" data-p="home"><svg class="navIcon"><use href="#i-sun"/></svg><span>Today</span></button>
+<button data-p="tasks"><svg class="navIcon"><use href="#i-check"/></svg><span>Tasks</span></button>
+<button data-p="calendar"><svg class="navIcon"><use href="#i-calendar"/></svg><span>Calendar</span></button>
+<div class="navGroup">Build</div>
+<button data-p="apps"><svg class="navIcon"><use href="#i-briefcase"/></svg><span>Applications</span></button>
+<button data-p="vert"><svg class="navIcon"><use href="#i-leaf"/></svg><span>VERT Lab</span></button>
+<button data-p="focus"><svg class="navIcon"><use href="#i-focus"/></svg><span>Focus</span></button>
+<div class="navGroup">Life</div>
+<button data-p="buddy"><svg class="navIcon"><use href="#i-paw"/></svg><span>Buddy</span></button>
+<button data-p="grow"><svg class="navIcon"><use href="#i-spark"/></svg><span>Grow</span></button>
+<button data-p="watch"><svg class="navIcon"><use href="#i-play"/></svg><span>Watch</span></button>
+<div class="navGroup">System</div>
+<button data-p="settings"><svg class="navIcon"><use href="#i-settings"/></svg><span>Settings</span></button>
+</nav>
+<div class="side"><div class="spr">🌱</div><b id="mood">Start small.</b><br><span id="level">Canopy level 1</span></div></aside>
+<main><div class="top"><div><h2 id="title">Today</h2><p id="date"></p></div><div class="actions"><input class="search" id="search" placeholder="Search Canopy…"><button class="btn" id="installBtn" style="display:none" onclick="installCanopy()"><svg class="icon"><use href="#i-download"/></svg> Install</button><button class="btn" onclick="reminderModal()"><svg class="icon"><use href="#i-bell"/></svg> Reminder</button><button class="btn primary" onclick="taskModal()"><svg class="icon"><use href="#i-plus"/></svg> Quick task</button></div></div>
+
+<section class="page active" id="home"><div class="hero"><div class="card heroText"><span class="tag gt">LESS SCREEN · MORE DOING</span><h1>Make space for what matters.</h1><p>One calm place for university, applications, VERT, learning, events and your own growth. Plans can change without your whole system falling apart.</p><div class="quote" id="quote"></div></div><div class="card center" style="display:grid;place-items:center;gap:10px"><span id="teaserFace" style="font-size:60px;line-height:1">🌱</span><b id="teaserLine" style="text-align:center">Your buddy is doing okay today.</b><p class="tiny" style="text-align:center;margin:0">Feeding, playing and customizing your companion all happen in one place now.</p><button class="btn primary" onclick="page('buddy')"><svg class="icon"><use href="#i-paw"/></svg> Visit your buddy</button></div></div>
+<div class="grid g4"><div class="card stat"><span class="label">Due today</span><div class="num" id="todayN">0</div><span class="tiny">unfinished tasks</span></div><div class="card stat"><span class="label">Deadlines</span><div class="num" id="deadN">0</div><span class="tiny">next 14 days</span></div><div class="card stat"><span class="label">Focus this month</span><div class="num" id="mins">0m</div><span class="tiny">intentional time</span></div><div class="card stat"><span class="label">Streak</span><div class="num" id="streak">0</div><span class="tiny">focus days</span></div></div>
+<div class="card" style="margin-top:15px"><div class="section"><h3>Daily habits</h3><span class="tiny">Small, every day, on purpose.</span></div><div class="grid g2" id="habitsCard"></div></div>
+<div class="grid g2" style="margin-top:15px"><div class="card"><div class="section"><h3>Today's plan</h3><button class="btn" onclick="page('tasks')">See all</button></div><div class="list" id="todayList"></div></div><div class="card"><div class="section"><h3>Next up</h3><button class="btn" onclick="page('calendar')">Calendar</button></div><div class="list" id="nextList"></div></div></div></section>
+
+<section class="page" id="tasks"><div class="grid g2"><div class="card"><div class="section"><div><h3>Tasks</h3><p class="tiny" style="margin:3px 0 0">Tasks with a date and time can remind you automatically.</p></div><div class="actions"><button class="btn" onclick="reminderModal()"><svg class="icon"><use href="#i-bell"/></svg> Reminder</button><button class="btn primary" onclick="taskModal()"><svg class="icon"><use href="#i-plus"/></svg> Task</button></div></div><div class="tabs" id="taskTabs"></div><div class="list" id="taskList"></div></div><div class="card"><h3>Quick capture</h3><p class="muted">Put it somewhere safe now. Schedule it later.</p><div class="form"><input id="quick" placeholder="e.g. Finish Rust ownership exercise"><button class="btn green" onclick="quickAdd()">Add to inbox</button></div><hr style="border:0;border-top:1px solid var(--line);margin:17px 0"><h3>Planning rule</h3><p class="tiny">Fixed commitments go on Calendar. Flexible work goes in Tasks. Big deadlines get subtasks. Focus sessions measure time spent, not perfection.</p></div></div></section>
+
+<section class="page" id="calendar"><div class="card"><div class="section"><h3 id="month"></h3><div class="actions"><button class="btn" onclick="month(-1)">←</button><button class="btn" onclick="month(1)">→</button><button class="btn primary" onclick="eventModal()"><svg class="icon"><use href="#i-plus"/></svg> Event</button></div></div><div class="calendar" id="cal"></div></div></section>
+
+<section class="page" id="apps"><div class="card"><div class="section"><h3>Application pipeline</h3><button class="btn primary" onclick="appModal()"><svg class="icon"><use href="#i-plus"/></svg> Application</button></div><p class="muted">Not started → In progress → Submitted → Decision.</p><div class="grid g2" id="appList"></div></div></section>
+
+<section class="page" id="vert"><div class="tabs"><button class="tab active" onclick="vertTab('overview',this)">Overview</button><button class="tab" onclick="vertTab('log',this)">Build log</button><button class="tab" onclick="vertTab('parts',this)">Parts & sensors</button></div><div id="vo"><div class="grid g2"><div class="card"><div class="section"><h3>VERT Lab</h3><button class="btn primary" onclick="logModal()"><svg class="icon"><use href="#i-plus"/></svg> Log</button></div><p class="muted">Versatile Eco-Farming Robotic Technology · automated greenhouse.</p><p><b id="logN">0</b> experiments documented</p><div class="progress"><i id="vp"></i></div></div><div class="card"><h3>Next VERT actions</h3><div class="list" id="vertTasks"></div></div></div></div><div id="vl" style="display:none" class="card"><div class="section"><h3>Build log</h3><button class="btn primary" onclick="logModal()"><svg class="icon"><use href="#i-plus"/></svg> Entry</button></div><div class="list" id="logs"></div></div><div id="vparts" style="display:none" class="card"><div class="section"><h3>Parts & sensors</h3><button class="btn primary" onclick="partModal()"><svg class="icon"><use href="#i-plus"/></svg> Part</button></div><div class="list" id="parts"></div></div></section>
+
+<section class="page" id="focus"><div class="grid g2"><div class="card center"><h3>Focus garden</h3><p class="muted">Pick a block, start, and leave the planning screen alone.</p><div class="tabs"><button class="tab" onclick="setTimer(5)">5 min</button><button class="tab active" onclick="setTimer(25)">25 min</button><button class="tab" onclick="setTimer(50)">50 min</button></div><div class="timer" id="timer">25:00</div><button class="btn primary" id="timerBtn" onclick="toggleTimer()">Start focus</button> <button class="btn" onclick="resetTimer()">Reset</button><div id="reflect" style="display:none;margin-top:20px"><h3>How did that feel?</h3><div class="tabs"><button class="tab" onclick="reflection('locked in')">🌿 Locked in</button><button class="tab" onclick="reflection('distracted')">🍃 Distracted</button><button class="tab" onclick="reflection('rushed')">🌱 Rushed</button></div></div></div><div class="card"><h3>Focus heatmap</h3><p class="muted">Your month as a small garden of consistency.</p><div class="heat" id="heat"></div><h3 style="margin-top:17px">Reflection pattern</h3><div class="tabs" id="refs"></div></div></div></section>
+
+<section class="page" id="buddy"><div class="grid g2"><div class="card center"><h3>Fern — Your Canopy Buddy</h3><p class="muted">Your one companion, right here. Feed, play, pet, water, talk to it, and let it rest.</p><div style="display:grid;place-items:center;background:#fff6e8;border-radius:20px;padding:15px 15px 40px;min-height:400px"><div class="mascotBubble" id="mascotBubble">I'm ready for an adventure! 🌱</div><div style="height:26px"></div><div class="mascot" id="mascot" title="Tap Fern"><span class="acc acc-headphones">🎧</span><span class="acc acc-owl">🦉</span><span class="acc acc-dumbbell">💪</span><span class="acc acc-rocket">🚀</span><span class="acc acc-briefcase">💼</span><div class="leaf">🌱</div><div class="tail"></div><div class="ear a"></div><div class="ear b"></div><div class="head"><div class="brow a"></div><div class="brow b"></div><div class="eye a"></div><div class="eye b"></div><div class="blush a"></div><div class="blush b"></div><div class="muzzle"></div><div class="nose"></div><div class="mouth"></div></div><div class="body"></div><div class="arm a"></div><div class="arm b"></div><div class="paw a"></div><div class="paw b"></div></div><div style="height:10px"></div><div class="mascotTools"><button onclick="mascotSay('encourage')"><svg class="icon"><use href="#i-message"/></svg> Talk</button><button onclick="mascotSay('celebrate')">✨ Cheer</button><button onclick="mascotSay('rest')">☁️ Rest</button></div></div><div class="petPanel" style="max-width:100%"><div class="petStats"><div class="petStat">🍎 Hunger<div class="petBar"><i id="petHunger"></i></div></div><div class="petStat">💚 Happiness<div class="petBar"><i id="petHappy"></i></div></div><div class="petStat">⚡ Energy<div class="petBar"><i id="petEnergy"></i></div></div></div><div class="food"><span id="foodText">🍎 Apples: 3 · 🍪 Cookies: 2</span><span class="tag gt" id="petLevel">Buddy Lv. 1</span></div><div class="petActions"><button onclick="feedPet('apple')">🍎 Feed</button><button onclick="feedPet('cookie')">🍪 Treat</button><button onclick="petBuddy()">🤍 Pet</button><button onclick="playBuddy()">🎾 Play</button><button onclick="waterBuddy()">💧 Water</button><button onclick="sleepBuddy()">😴 Sleep</button></div></div></div><div class="card"><h3>Buddy journal</h3><p class="muted">Small interactions give your day a softer rhythm.</p><div class="list" id="buddyJournal"></div><hr style="border:0;border-top:1px solid var(--line);margin:17px 0"><h3>How the buddy grows</h3><p class="tiny">Care actions earn Care XP. Focus sessions and completed tasks also give tiny boosts. At higher levels, your buddy becomes happier and unlocks new reactions.</p><div class="progress"><i id="careProgress"></i></div><p class="tiny" id="careText"></p><hr style="border:0;border-top:1px solid var(--line);margin:17px 0"><h3>Customize your buddy</h3><p class="tiny">Pick a color. Accessories unlock from the things you actually do — Focus, VERT, Duolingo, workouts and applications.</p><p class="tiny" style="margin-top:10px">Color</p><div class="swatches" id="swatches"></div><div style="margin-top:10px" id="accToggles"></div></div></div></section><section class="page" id="grow"><div class="grid g2"><div class="card center"><h3>Canopy growth</h3><p class="muted">The mascot grows from focus sessions — consistency, not perfection.</p><div id="big" style="font-size:75px;padding:14px">🌱</div><div class="progress"><i id="growth"></i></div><p class="tiny" id="growthText"></p><div class="tabs" id="badges"></div></div><div class="card"><h3>LinkedIn idea garden</h3><p class="muted">Completed VERT or learning work can become a story.</p><div class="list" id="ideas"></div><hr style="border:0;border-top:1px solid var(--line);margin:17px 0"><h3>Draft box</h3><textarea id="draft" maxlength="3000" placeholder="Write the thought while it's fresh…"></textarea><div class="section"><span class="tiny" id="chars">0 / 3000</span><button class="btn green" onclick="saveDraft()">Save draft</button></div></div></div></section>
+
+<section class="page" id="watch"><div class="grid g2"><div class="card"><div class="section"><h3>Watch queue</h3><button class="btn primary" onclick="videoModal()"><svg class="icon"><use href="#i-plus"/></svg> Video</button></div><div class="tabs" id="videoTabs"></div><div class="list" id="videos"></div></div><div class="card"><h3>Suggested shelf</h3><p class="muted">A few starting points for business, programming and creator learning.</p><div class="list" id="suggestions"></div></div></div></section>
+
+<section class="page" id="settings"><div class="grid g2"><div class="card"><h3>Preferences</h3><div class="form"><label>Name<input id="name"></label><label>Daily priority<select id="priority"><option>Balanced</option><option>University</option><option>VERT</option><option>Applications</option><option>Learning</option></select></label><button class="btn primary" onclick="saveSettings()">Save</button><button class="btn" onclick="browserNotify()">Enable browser reminders</button></div></div><div class="card"><h3>Cloud reminders</h3><p class="muted">Connect Canopy to the alarm service so tasks, events, and application deadlines can alert you even when the app is closed.</p><label>Backend URL<input id="backendUrl" placeholder="https://your-canopy-backend.example"></label><div class="actions" style="margin-top:8px"><button class="btn green" onclick="connectBackend()">Connect & sync</button><button class="btn" onclick="disconnectBackend()">Disconnect</button><button class="btn" onclick="sendTestPush()">Send test notification</button></div><p class="tiny" id="backendStatus">Not connected</p><p class="tiny">Keep notifications allowed and connect the alarm service once. Scheduled alarms are sent to this device even when Canopy is closed.</p></div></div><div class="card"><h3>Backup & transfer</h3><p class="muted">Your data is stored locally. Export from your laptop and import on your tablet to move your Canopy world.</p><button class="btn green" onclick="exportData()">Export backup</button><label class="btn" style="display:inline-flex;margin-left:6px;cursor:pointer">Import backup<input id="import" type="file" accept=".json" style="display:none"></label><p class="tiny">Import replaces the current local data after confirmation.</p></div></div></section>
+</main></div>
+<div class="modal" id="modal"><div class="modalbox"><div class="modalhead"><h3 id="mt">New</h3><button class="x" onclick="closeModal()">×</button></div><div id="mb"></div></div></div>
+<script>
+const K="canopy_data_v2",iso=()=>new Date().toISOString().slice(0,10),id=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6),esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])),safeUrl=s=>{try{const u=new URL(String(s||""),location.href);return ["http:","https:"].includes(u.protocol)?u.href:""}catch{return ""}};
+let d=JSON.parse(localStorage.getItem(K)||"null")||{settings:{name:"",priority:"Balanced"},tasks:[{id:id(),title:"Complete a Rust practice session",area:"Learning",date:iso(),time:"17:00",priority:"Medium",done:false,sub:[]},{id:id(),title:"Work on the next VERT functionality",area:"VERT",date:iso(),time:"19:00",priority:"High",done:false,sub:[]}],events:[],apps:[],logs:[],parts:[{id:id(),name:"ESP32",status:"Have"},{id:id(),name:"Soil moisture sensor",status:"Have"},{id:id(),name:"pH sensor",status:"Need"},{id:id(),name:"Pump + tubing",status:"Have"}],focus:[],refs:[],videos:[],draft:"",habits:{duolingo:{},workout:{}},milestones:{linkedin:false},pet:{hunger:72,happy:68,energy:76,level:1,xp:0,apples:3,cookies:2,journal:[],color:"amber",equipped:[]}};
+if(!d.habits)d.habits={duolingo:{},workout:{}};
+if(!d.milestones)d.milestones={linkedin:false};
+const petDefaults={hunger:72,happy:68,energy:76,level:1,xp:0,apples:3,cookies:2,journal:[],lastDecay:iso(),color:"amber",equipped:[]};d.pet=Object.assign({},petDefaults,d.pet||{});if(!Array.isArray(d.pet.journal))d.pet.journal=[];if(!Array.isArray(d.pet.equipped))d.pet.equipped=[];if(!d.pet.color)d.pet.color="amber";if(!d.pet.lastDecay)d.pet.lastDecay=iso();
+(function decayPet(){const days=Math.round((new Date(iso())-new Date(d.pet.lastDecay))/864e5);if(days>0){d.pet.hunger=Math.max(15,d.pet.hunger-days*10);d.pet.energy=Math.max(15,d.pet.energy-days*6);d.pet.happy=Math.max(15,d.pet.happy-days*6);d.pet.lastDecay=iso();}})();
+const save=()=>{localStorage.setItem(K,JSON.stringify(d));render()},fmt=s=>new Date(s+"T12:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"});
+function page(x){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id===x));document.querySelectorAll("nav button").forEach(e=>e.classList.toggle("active",e.dataset.p===x));document.getElementById("title").textContent={home:"Today",tasks:"Tasks",calendar:"Calendar",apps:"Applications",vert:"VERT Lab",focus:"Focus",buddy:"Buddy",grow:"Grow",watch:"Watch",settings:"Settings"}[x]}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>page(b.dataset.p));
+function modal(t,b){mt.textContent=t;mb.innerHTML=b;document.getElementById("modal").classList.add("open")}function closeModal(){document.getElementById("modal").classList.remove("open")}
+function taskModal(t=null){t=t||{};modal(t.id?"Edit task":"New task",`<div class=form><label>Task<input id=f1 value="${esc(t.title)}" placeholder="What needs to happen?"></label><div class=form2><label>Area<select id=f2>${["University","VERT","Applications","Learning","Duolingo","Workout","Personal"].map(x=>`<option ${t.area===x?"selected":""}>${x}</option>`).join("")}</select></label><label>Priority<select id=f3>${["Low","Medium","High"].map(x=>`<option ${t.priority===x?"selected":""}>${x}</option>`).join("")}</select></label></div><div class=form2><label>Date<input id=f4 type=date value="${t.date||iso()}"></label><label>Time<input id=f5 type=time value="${t.time||""}"></label></div><label>Subtasks<textarea id=f6 placeholder="One per line">${(t.sub||[]).map(x=>x.title).join("\n")}</textarea></label><div class=actions><button class="btn primary" onclick="saveTask('${t.id||""}')">Save</button>${t.id?`<button class=btn onclick="delTask('${t.id}')">Delete</button>`:""}</div></div>`)}
+function saveTask(i){const f1=document.getElementById("f1"),f2=document.getElementById("f2"),f3=document.getElementById("f3"),f4=document.getElementById("f4"),f5=document.getElementById("f5"),f6=document.getElementById("f6");let o={id:i||id(),title:f1.value.trim(),area:f2.value,priority:f3.value,date:f4.value,time:f5.value,done:false,sub:f6.value.split("\n").map(x=>x.trim()).filter(Boolean).map(x=>({title:x,done:false}))};if(!o.title)return;if(i){let old=d.tasks.find(x=>x.id===i);o.done=old.done;o.reminder=!!old.reminder;o.sub=o.sub.map((x,n)=>({title:x.title,done:old.sub?.[n]?.done||false}));d.tasks=d.tasks.map(x=>x.id===i?o:x)}else d.tasks.push(o);closeModal();save();syncTaskToBackend(o)}
+function delTask(i){if(confirm("Delete this task?")){d.tasks=d.tasks.filter(x=>x.id!==i);closeModal();save();deleteTaskFromBackend(i)}}function toggle(i){let t=d.tasks.find(x=>x.id===i);t.done=!t.done;save();syncTaskToBackend(t);if(t.done)mascotSay('celebrate')}function sub(i,n){d.tasks.find(x=>x.id===i).sub[n].done=!d.tasks.find(x=>x.id===i).sub[n].done;save()}function quickAdd(){let x=quick.value.trim();if(!x)return;const nt={id:id(),title:x,area:"Personal",date:iso(),time:"",priority:"Medium",done:false,sub:[]};d.tasks.push(nt);quick.value="";save();syncTaskToBackend(nt)}
+let tf="All";function renderTasks(){let areas=["All","University","VERT","Applications","Learning","Duolingo","Workout","Personal"];taskTabs.innerHTML=areas.map(x=>`<button class="tab ${tf===x?"active":""}" onclick="tf='${x}';renderTasks()">${x}</button>`).join("");let q=(search.value||"").toLowerCase();let a=d.tasks.filter(t=>(tf==="All"||t.area===tf)&&(`${t.title} ${t.area}`.toLowerCase().includes(q))).sort((x,y)=>(x.done-y.done)||x.date.localeCompare(y.date));taskList.innerHTML=a.length?a.map(t=>`<div class=item><input class=check type=checkbox ${t.done?"checked":""} onchange="toggle('${t.id}')"><div class=grow><b style="${t.done?"text-decoration:line-through;color:#aaa":""}">${esc(t.title)}</b><div><span class=tag>${t.area}</span><span class="tag ${t.priority==="High"?"high":""}">${t.priority}</span><span class=tag>${t.date?fmt(t.date):""}${t.time?" · "+t.time:""}</span>${t.reminder?`<span class="tag high">Alarm</span>`:""}</div>${t.sub.length?`<div style="margin-top:7px">${t.sub.map((s,n)=>`<label style="display:flex;gap:6px;align-items:center"><input class=check type=checkbox ${s.done?"checked":""} onchange="sub('${t.id}',${n})"><span style="${s.done?"text-decoration:line-through;color:#aaa":""}">${esc(s.title)}</span></label>`).join("")}</div>`:""}</div><button class=btn onclick="taskModal(d.tasks.find(x=>x.id==='${t.id}'))">Edit</button></div>`).join(""):"<div class=muted>Nothing here. 🌱</div>"}
+function reminderModal(existing=null){existing=existing||{};modal("Set a reminder",`<div class=form><p class=tiny style="margin:0">Choose what you want to remember and when. If notifications are connected, Canopy can alert you while the app is in the background.</p><label>Remind me to<input id=r1 placeholder="e.g. Take a break, call home, study…"></label><div class=form2><label>Date<input id=r2 type=date value="${existing.date||iso()}"></label><label>Time<input id=r3 type=time value="${existing.time||""}"></label></div><label>Priority<select id=r4><option>Medium</option><option>High</option><option>Low</option></select></label><div class=actions><button class="btn primary" onclick="saveReminder()"><svg class="icon"><use href="#i-bell"/></svg> Set reminder</button></div></div>`)}function saveReminder(){const titleEl=document.getElementById("r1"),dateEl=document.getElementById("r2"),timeEl=document.getElementById("r3"),priorityEl=document.getElementById("r4");const title=titleEl.value.trim();if(!title){titleEl.focus();return}if(!dateEl.value||!timeEl.value){alert("Please choose a date and time for the reminder.");return}const r={id:id(),title,area:"Personal",priority:priorityEl.value,date:dateEl.value,time:timeEl.value,done:false,reminder:true,sub:[]};d.tasks.push(r);closeModal();save();syncTaskToBackend(r);requestReminderPermission()}async function requestReminderPermission(){if(!("Notification" in window))return;try{if(Notification.permission==="default")await Notification.requestPermission()}catch(_){}}function eventModal(){modal("New event",`<div class=form><label>Event<input id=e1 placeholder="Orientation, workshop, meeting…"></label><div class=form2><label>Date<input id=e2 type=date value="${iso()}"></label><label>Alarm time<input id=e3 type=time value="09:00"></label></div><label>Location / link<input id=e4 placeholder="Optional"></label><label>Notes<textarea id=e5></textarea></label><p class=tiny>Canopy will send an alarm for this event even when the app is closed, once cloud reminders are connected.</p><button class="btn primary" onclick="saveEvent()">Add event</button></div>`)}function saveEvent(){const e={id:id(),title:e1.value.trim(),date:e2.value,time:e3.value,loc:e4.value,notes:e5.value};if(!e.title||!e.date){alert("Please enter an event and date.");return}d.events.push(e);closeModal();save();syncEventToBackend(e)}
+let cd=new Date();function month(n){cd.setMonth(cd.getMonth()+n);renderCal()}function renderCal(){let y=cd.getFullYear(),m=cd.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0);document.getElementById("month").textContent=cd.toLocaleDateString(undefined,{month:"long",year:"numeric"});let a=[];for(let i=0;i<first.getDay();i++)a.push("<div></div>");for(let z=1;z<=last.getDate();z++){let s=new Date(y,m,z).toISOString().slice(0,10),x=[...d.events.filter(e=>e.date===s).map(e=>"📍 "+e.title),...d.apps.filter(e=>e.deadline===s).map(e=>"🚀 "+e.name),...d.tasks.filter(e=>e.date===s).slice(0,3).map(e=>"✓ "+e.title)];a.push(`<div class="day ${s===iso()?"today":""}"><b>${z}</b>${x.slice(0,5).map(v=>`<div class=dot>${esc(v)}</div>`).join("")}</div>`)}cal.innerHTML=a.join("")}
+function appModal(a=null){a=a||{};modal(a.id?"Edit application":"New application",`<div class=form><label>Program / opportunity<input id=a1 value="${esc(a.name)}" placeholder="e.g. University scholarship"></label><div class=form2><label>Deadline<input id=a2 type=date value="${a.deadline||""}"></label><label>Alarm time<input id=a5 type=time value="${a.alarmTime||"09:00"}"></label></div><label>Application form link<input id=a6 type=url value="${esc(a.url||"")}" placeholder="https://…"></label><label>Stage<select id=a3>${["Not started","In progress","Submitted","Decision"].map(x=>`<option ${a.stage===x?"selected":""}>${x}</option>`).join("")}</select></label><label>Subtasks<textarea id=a4 placeholder="Essay\nTranscript\nRecommendation letter\nVideo">${(a.sub||[]).map(x=>x.title).join("\n")}</textarea></label><p class=tiny>The alarm will remind you about this application at the time you choose, even when Canopy is closed.</p><button class="btn primary" onclick="saveApp('${a.id||""}')">Save</button></div>`)}
+function saveApp(i){let old=i?d.apps.find(x=>x.id===i):null,o={id:i||id(),name:a1.value.trim(),deadline:a2.value,alarmTime:a5.value||"09:00",url:safeUrl(a6.value.trim()),stage:a3.value,sub:a4.value.split("\n").map(x=>x.trim()).filter(Boolean).map((x,n)=>({title:x,done:old?.sub?.[n]?.done||false}))};if(!o.name){a1.focus();return}d.apps=i?d.apps.map(x=>x.id===i?o:x):[...d.apps,o];closeModal();save();syncApplicationToBackend(o)}function appSub(i,n){let a=d.apps.find(x=>x.id===i);a.sub[n].done=!a.sub[n].done;save()}function renderApps(){appList.innerHTML=d.apps.length?d.apps.map(a=>{let done=a.sub.filter(x=>x.done).length,total=a.sub.length;return `<div class=card><div class=section><h3>${esc(a.name)}</h3><button class=btn onclick="appModal(d.apps.find(x=>x.id==='${a.id}'))">Edit</button></div><span class=tag>${a.stage}</span><span class=tag>${a.deadline?fmt(a.deadline):"No deadline"}</span>${a.deadline?`<span class=tag>Alarm ${esc(a.alarmTime||"09:00")}</span>`:""}${a.url?`<div style="margin-top:12px"><a class="btn primary" target="_blank" rel="noopener" href="${esc(a.url)}"><svg class="icon"><use href="#i-briefcase"/></svg> Open application form</a></div>`:`<p class=tiny style="margin-top:12px">Add the application form link when you edit this application.</p>`}<div class=progress style="margin:12px 0"><i style="width:${total?done/total*100:0}%"></i></div>${total?`<div class=list>${a.sub.map((s,n)=>`<label style="display:flex;gap:6px;align-items:center"><input class=check type=checkbox ${s.done?"checked":""} onchange="appSub('${a.id}',${n})">${esc(s.title)}</label>`).join("")}</div>`:"<span class=tiny>Add subtasks to track the application.</span>"}</div>`}).join(""):"<div class=muted>No applications yet.</div>"}
+function logModal(){modal("VERT build log",`<div class=form><label>What did you work on?<input id=l1></label><label>What did you try?<textarea id=l2></textarea></label><label>What worked / didn't?<textarea id=l3></textarea></label><label>Next step<input id=l4></label><button class="btn primary" onclick="saveLog()">Save entry</button></div>`)}function saveLog(){const a=document.getElementById("l1"),b=document.getElementById("l2"),c=document.getElementById("l3"),e=document.getElementById("l4");d.logs.unshift({id:id(),date:iso(),title:a.value,try:b.value,result:c.value,next:e.value});closeModal();save()}function partModal(){modal("Add part / sensor",`<div class=form><label>Name<input id=p1 placeholder="e.g. DHT22, light sensor, pump"></label><label>Status<select id=p2><option>Have</option><option>Need</option><option>Testing</option></select></label><button class="btn primary" onclick="savePart()">Add part</button></div>`)}function savePart(){const nameEl=document.getElementById("p1"),statusEl=document.getElementById("p2");const name=nameEl.value.trim();if(!name){nameEl.focus();return}d.parts.push({id:id(),name,status:statusEl.value});closeModal();save()}function vertTab(x,b){document.querySelectorAll("[onclick^='vertTab']").forEach(q=>q.classList.remove("active"));b.classList.add("active");vo.style.display=x==="overview"?"":"none";vl.style.display=x==="log"?"":"none";vparts.style.display=x==="parts"?"":"none"}
+function renderVert(){let t=d.tasks.filter(x=>x.area==="VERT"&&!x.done);vertTasks.innerHTML=t.slice(0,6).map(x=>`<div class=item><input class=check type=checkbox onchange="toggle('${x.id}')"><div class=grow>${esc(x.title)}<div><span class=tag>${fmt(x.date)}</span></div></div></div>`).join("")||"<div class=muted>No VERT tasks waiting. 🌱</div>";logN.textContent=d.logs.length;vp.style.width=Math.min(100,d.logs.length*5)+"%";logs.innerHTML=d.logs.map(x=>`<div class=item><div class=grow"><span class=tag>${fmt(x.date)}</span><h3>${esc(x.title)}</h3><p><b>Tried:</b> ${esc(x.try)}</p><p><b>Result:</b> ${esc(x.result)}</p><p><b>Next:</b> ${esc(x.next)}</p></div></div>`).join("")||"<div class=muted>Your experiments will build a useful history here.</div>";parts.innerHTML=d.parts.map(x=>`<div class=item><div class=grow><b>${esc(x.name)}</b></div><span class="tag ${x.status==="Have"?"gt":"high"}">${x.status}</span></div>`).join("")}
+let secs=1500,run=false,h;function setTimer(m){clearInterval(h);run=false;secs=m*60;timerBtn.textContent="Start focus";reflect.style.display="none";showTimer()}function showTimer(){timer.textContent=String(Math.floor(secs/60)).padStart(2,"0")+":"+String(secs%60).padStart(2,"0")}function toggleTimer(){if(run){clearInterval(h);run=false;timerBtn.textContent="Resume focus";return}run=true;timerBtn.textContent="Pause";h=setInterval(()=>{secs--;showTimer();if(secs<=0){clearInterval(h);run=false;d.focus.push({date:iso(),minutes:25});save();reflect.style.display="block";timerBtn.textContent="Start focus";mascotSay('celebrate');alert("Focus block complete. 🌱 Take a breath.");}},1000)}function resetTimer(){setTimer(25)}function reflection(x){d.refs.push({date:iso(),type:x});save();reflect.style.display="none"}function calcStreak(){let n=0,x=new Date();for(let i=0;i<365;i++){let s=x.toISOString().slice(0,10);if(d.focus.some(v=>v.date===s)){n++;x.setDate(x.getDate()-1)}else if(i===0)x.setDate(x.getDate()-1);else break}return n}
+function habitStreak(key){let n=0,x=new Date();for(let i=0;i<365;i++){let s=x.toISOString().slice(0,10);if(d.habits[key][s]){n++;x.setDate(x.getDate()-1)}else if(i===0)x.setDate(x.getDate()-1);else break}return n}
+function toggleHabit(key){const td=iso();if(d.habits[key][td]){delete d.habits[key][td];save()}else{d.habits[key][td]=true;d.pet.happy=Math.min(100,d.pet.happy+4);care(key,key==='duolingo'?'Language practice done. 🦉✨':'Workout logged. 💪🌿',2)}}
+const HABIT_META={duolingo:{label:'Duolingo',icon:'🦉',sub:'Daily language practice'},workout:{label:'Workout',icon:'💪',sub:'Move your body today'}};
+function renderHabits(){habitsCard.innerHTML=Object.keys(HABIT_META).map(k=>{const m=HABIT_META[k],done=!!d.habits[k][iso()],s=habitStreak(k);return `<div class="item"><input class=check type=checkbox ${done?"checked":""} onchange="toggleHabit('${k}')"><div class=grow><b>${m.icon} ${m.label}</b><div class=tiny>${m.sub}</div><div><span class=tag>${s?`🔥 ${s} day streak`:"No streak yet"}</span></div></div></div>`}).join("")}
+function renderFocus(){let a=[];for(let i=55;i>=0;i--){let x=new Date();x.setDate(x.getDate()-i);let s=x.toISOString().slice(0,10),m=d.focus.filter(v=>v.date===s).reduce((n,v)=>n+v.minutes,0);a.push(`<span class="${m>=50?"l4":m>=25?"l3":m>=10?"l2":m?"l1":""}" title="${s}: ${m} min"></span>`)}heat.innerHTML=a.join("");let c={};d.refs.forEach(x=>c[x.type]=(c[x.type]||0)+1);refs.innerHTML=Object.entries(c).map(x=>`<span class=tag>${x[0]}: ${x[1]}</span>`).join("")||"<span class=tiny>No reflections yet.</span>"}
+const MOODS=['happy','excited','sleepy','sad','wink'];
+function setMood(el,cls){if(!el)return;MOODS.forEach(m=>el.classList.remove(m));if(cls)el.classList.add(cls)}
+function setGrowClass(el,l){if(!el)return;['grow2','grow3','grow4'].forEach(c=>el.classList.remove(c));if(l>1)el.classList.add('grow'+l)}
+const ACCESSORIES=[
+  {id:'headphones',label:'🎧 Focus headphones',hint:'7-day focus streak',unlocked:()=>calcStreak()>=7},
+  {id:'owl',label:'🦉 Duolingo owl badge',hint:'7-day Duolingo streak',unlocked:()=>habitStreak('duolingo')>=7},
+  {id:'dumbbell',label:'💪 Workout wristband',hint:'7-day workout streak',unlocked:()=>habitStreak('workout')>=7},
+  {id:'rocket',label:'🚀 Applications rocket pin',hint:'submit an application',unlocked:()=>d.apps.some(x=>x.stage==='Submitted')},
+  {id:'briefcase',label:'💼 LinkedIn briefcase pin',hint:'save your first draft',unlocked:()=>d.milestones.linkedin}
+];
+const FUR_COLORS={amber:'#f0a860',sage:'#a3c48c',rose:'#eea69f',sky:'#94c3e0'};
+function setFurColor(c){d.pet.color=c;save()}
+function toggleAccessory(a){if(!ACCESSORIES.find(x=>x.id===a)?.unlocked())return;const i=d.pet.equipped.indexOf(a);if(i>-1)d.pet.equipped.splice(i,1);else{if(d.pet.equipped.length>=3)d.pet.equipped.shift();d.pet.equipped.push(a)}save()}
+function applyAccessories(el){if(!el)return;el.classList.forEach(c=>{if(c.startsWith('eq-'))el.classList.remove(c)});d.pet.equipped.forEach(a=>{if(ACCESSORIES.find(x=>x.id===a)?.unlocked())el.classList.add('eq-'+a)})}
+function renderCustomize(){if(typeof swatches==="undefined")return;swatches.innerHTML=Object.entries(FUR_COLORS).map(([k,hex])=>`<button class="swatch${d.pet.color===k?" active":""}" style="background:${hex}" title="${k}" onclick="setFurColor('${k}')"></button>`).join("");
+  accToggles.innerHTML=ACCESSORIES.map(a=>{const on=a.unlocked(),eq=d.pet.equipped.includes(a.id);return `<label class="acctoggle ${on?"":"locked"}"><input type=checkbox ${eq?"checked":""} ${on?"":"disabled"} onchange="toggleAccessory('${a.id}')"><span class=grow>${a.label}<div class=tiny>${on?"Unlocked":"Unlock: "+a.hint}</div></span></label>`}).join("")}
+function renderGrow(){let n=d.focus.length,l=n>=30?4:n>=15?3:n>=5?2:1;setGrowClass(mascot,l);big.textContent=["🌱","🌿","🪴","🌳"][l-1];growth.style.width=(l===4?100:(n%5)/5*100)+"%";growthText.textContent=`${n} focus sessions · ${l<4?5-(n%5)+" more to the next growth stage":"Your canopy is thriving."}`;let b=[];if(d.focus.length)b.push("🌿 First focus block");if(calcStreak()>=7)b.push("🔥 7-day focus streak");if(d.apps.some(x=>x.stage==="Submitted"))b.push("🚀 First application submitted");if(d.logs.length>=10)b.push("🌱 VERT log #10");if(habitStreak('duolingo')>=7)b.push("🦉 7-day Duolingo streak");if(habitStreak('workout')>=7)b.push("💪 7-day workout streak");badges.innerHTML=b.map(x=>`<span class=tag>${x}</span>`).join("")||"<span class=tiny>Your first milestone is waiting.</span>";let ideaList=d.tasks.filter(x=>x.done).slice(-6).map(x=>x.area==="VERT"?`I just worked on VERT — here's what I learned from ${x.title.toLowerCase()}.`:x.area==="Learning"?`A small lesson from learning: ${x.title.toLowerCase()}.`:null).filter(Boolean);document.getElementById("ideas").innerHTML=(ideaList.length?ideaList:["Finish meaningful work and Canopy will suggest a story angle here."]).map(x=>`<div class=item><div class=grow>${esc(x)}</div><button class=btn onclick="draft.value=${JSON.stringify(x)};chars.textContent=draft.value.length+' / 3000'">Use</button></div>`).join("")}
+draft.oninput=()=>chars.textContent=draft.value.length+" / 3000";function saveDraft(){d.draft=draft.value;if(draft.value.trim())d.milestones.linkedin=true;save();alert("Draft saved locally.")}
+
+const sugg=[["Codie Sanchez","Business, markets and entrepreneurship","https://www.youtube.com/results?search_query=Codie+Sanchez"],["Myron Golden","Business, sales and personal development","https://www.youtube.com/results?search_query=Myron+Golden"],["HTX Studio","Creative and technology inspiration","https://www.youtube.com/results?search_query=HTX+Studio"],["Fireship","Fast programming and software explainers","https://www.youtube.com/results?search_query=Fireship"],["ThePrimeTime","Programming and developer discussions","https://www.youtube.com/results?search_query=ThePrimeTime"],["Y Combinator","Startup and founder lessons","https://www.youtube.com/results?search_query=Y+Combinator+startup+school"]];
+let vf="All";function videoModal(){modal("Add to watch queue",`<div class=form><label>Title<input id=w1 placeholder="What do you want to watch?"></label><label>YouTube URL<input id=w2 placeholder="https://youtube.com/watch?v=…"></label><label>Purpose<select id=w3>${["Business","Programming","Motivation","VERT","Learning","Relaxation"].map(x=>`<option>${x}</option>`).join("")}</select></label><button class="btn primary" onclick="saveVideo()">Add to queue</button></div>`)}function saveVideo(){const titleEl=document.getElementById("w1"),urlEl=document.getElementById("w2"),typeEl=document.getElementById("w3");const title=titleEl.value.trim(),url=urlEl.value.trim();if(!title||!url){if(!title)titleEl.focus();else urlEl.focus();return}d.videos.push({id:id(),title,url,type:typeEl.value});closeModal();save();page("watch")}function renderWatch(){let t=["All","Business","Programming","Motivation","VERT","Learning","Relaxation"];videoTabs.innerHTML=t.map(x=>`<button class="tab ${vf===x?"active":""}" onclick="vf='${x}';renderWatch()">${x}</button>`).join("");videos.innerHTML=d.videos.filter(x=>vf==="All"||x.type===vf).map(x=>`<div class=item><div class=grow><b>${esc(x.title)}</b><div><span class=tag>${x.type}</span></div></div><a class=btn target=_blank rel=noopener href="${esc(x.url)}">Watch</a></div>`).join("")||"<div class=tiny>Your watch queue is clear.</div>";suggestions.innerHTML=sugg.map(x=>`<div class=item><div class=grow><b>${x[0]}</b><div class=tiny>${x[1]}</div></div><a class="watch-explore" target="_blank" rel="noopener" href="${x[2]}" aria-label="Explore ${x[0]}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 5h6v6"></path><path d="M10 14 19 5"></path><path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"></path></svg><span>Explore</span></a></div>`).join("")}
+function saveSettings(){d.settings.name=name.value;d.settings.priority=priority.value;save();alert("Settings saved.")}function exportData(){let b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="canopy-backup-"+iso()+".json";a.click();URL.revokeObjectURL(a.href)}document.getElementById('import').onchange=e=>{let r=new FileReader();r.onload=()=>{try{if(confirm("Replace current Canopy data?")){d=JSON.parse(r.result);save()}}catch{alert("Invalid backup file.")}};r.readAsText(e.target.files[0])};async function browserNotify(){if(!("Notification"in window))return alert("Notifications are not supported here.");let p=await Notification.requestPermission();if(p!=="granted")return alert("Notifications were not enabled.");try{const reg=await navigator.serviceWorker?.ready;if(reg?.showNotification)await reg.showNotification("Canopy reminders enabled",{body:"You can now receive reminder notifications.",icon:"./icon-192.png",badge:"./icon-192.png"})}catch(_){}alert("Reminders are enabled. For reminders when Canopy is closed, connect the backend in Settings.")} 
+search.oninput=()=>{renderTasks();renderApps();renderWatch()}
+let mascotTimer=null;function mascotSay(mode){let msgs={encourage:["One thing at a time. You’ve got this. 🌱","Tiny progress still counts.","Let's make today useful, not perfect."],celebrate:["YES! Look at you showing up! ✨","That deserves a little happy dance! 🌿","Another step for future you! 🎉"],rest:["Rest is part of the plan. ☁️","Take a breath. Your brain needs space too.","A short reset, then we can continue. 🌱"]}[mode];let text=msgs[Math.floor(Math.random()*msgs.length)];mascotBubble.textContent=text;setMood(mascot,mode==='celebrate'?'excited':mode==='rest'?'sleepy':'happy');clearTimeout(mascotTimer);mascotTimer=setTimeout(()=>{setMood(mascot,null)},1800)}mascot.onclick=()=>{let modes=['encourage','celebrate','rest'];mascotSay(modes[Math.floor(Math.random()*modes.length)])};setInterval(()=>{if(document.hidden)return;let eyes=document.querySelectorAll('.eye');eyes.forEach(e=>e.classList.add('blink'));setTimeout(()=>eyes.forEach(e=>e.classList.remove('blink')),150)},4200);
+function petMood(){let p=d.pet;if(p.energy<20)return ['sleepy','I need a tiny nap… 😴'];if(p.hunger<25)return ['sad','My tummy is rumbling… 🍎'];if(p.happy>85)return ['excited','I feel so loved! ✨'];if(p.happy>65)return ['happy','This is a good day to grow together. 🌿'];return ['','We’re doing okay. One little step at a time. 🌱']}function petReaction(text,cls='happy'){setMood(mascot,cls);setTimeout(()=>setMood(mascot,null),1300);if(mascotBubble)mascotBubble.textContent=text}function care(action,text,xp=1){d.pet.xp+=xp;while(d.pet.xp>=10){d.pet.xp-=10;d.pet.level++;}d.pet.journal.unshift({date:iso(),action,text});d.pet.journal=d.pet.journal.slice(0,12);petReaction(text,action==='sleep'?'sleepy':action==='play'?'excited':'happy');save()}function feedPet(kind){if(kind==='apple'&&d.pet.apples<=0)return petReaction('We’re out of apples! 🍎','sad');if(kind==='cookie'&&d.pet.cookies<=0)return petReaction('No treats left! Maybe an apple? 🍪','sad');if(kind==='apple'){d.pet.apples--;d.pet.hunger=Math.min(100,d.pet.hunger+24);d.pet.happy=Math.min(100,d.pet.happy+5);care('feed','Yum! Thanks for the apple! 🍎',2)}else{d.pet.cookies--;d.pet.hunger=Math.min(100,d.pet.hunger+15);d.pet.happy=Math.min(100,d.pet.happy+12);care('treat','A treat?! You really know me. 🍪✨',3)}}function petBuddy(){d.pet.happy=Math.min(100,d.pet.happy+10);care('pet','Awww… I love that. 🤍',2);hearts()}function playBuddy(){if(d.pet.energy<15)return petReaction('I’m too sleepy to play right now. 😴','sleepy');d.pet.energy=Math.max(0,d.pet.energy-14);d.pet.happy=Math.min(100,d.pet.happy+18);care('play','Play time! Let’s go! 🎾',3);hearts()}function waterBuddy(){d.pet.energy=Math.min(100,d.pet.energy+8);d.pet.happy=Math.min(100,d.pet.happy+5);care('water','Fresh water! 💧🌱',1)}function sleepBuddy(){d.pet.energy=Math.min(100,d.pet.energy+35);d.pet.happy=Math.min(100,d.pet.happy+4);care('sleep','Shhh… I’m taking a cozy little nap. ☁️😴',2)}function hearts(){if(!mascot)return;for(let i=0;i<3;i++){let q=document.createElement('span');q.className='petHeart';q.textContent='♥';q.style.left=(55+i*18)+'px';q.style.top='45px';mascot.appendChild(q);setTimeout(()=>q.remove(),1000)}}function renderPet(){let p=d.pet,vals={hunger:petHunger,happy:petHappy,energy:petEnergy};for(let k of ['hunger','happy','energy']){if(vals[k])vals[k].style.width=p[k]+'%'}foodText.textContent=`🍎 Apples: ${p.apples} · 🍪 Cookies: ${p.cookies}`;petLevel.textContent=`Buddy Lv. ${p.level}`;if(typeof level!=="undefined")level.textContent=`Canopy level ${p.level}`;buddyJournal&&(buddyJournal.innerHTML=p.journal.length?p.journal.map(j=>`<div class=item><div class=grow><b>${esc(j.action)}</b><div class=tiny>${esc(j.text)}</div></div><span class=tag>${fmt(j.date)}</span></div>`).join(''):'<div class=tiny>Your buddy journal will appear here. 🌱</div>');careProgress&&(careProgress.style.width=(p.xp/10*100)+'%');careText&&(careText.textContent=`${p.xp}/10 Care XP to level ${p.level+1}`);mascot.style.setProperty('--fur',FUR_COLORS[p.color]||FUR_COLORS.amber);applyAccessories(mascot);renderCustomize();const[mc]=petMood();teaserFace.textContent=p.happy>85?'✨':p.happy>65?'🌿':p.hunger<25?'🍎':p.energy<20?'😴':'🌱';teaserLine.textContent=p.happy>65?'Your buddy is thriving today.':p.hunger<25?'Your buddy could use a snack.':p.energy<20?'Your buddy is ready for a nap.':'Your buddy is doing okay today.'}
+function render(){date.textContent=new Date().toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric",year:"numeric"});let td=iso(),today=d.tasks.filter(x=>x.date===td&&!x.done).sort((a,b)=>(a.time||"99").localeCompare(b.time||"99"));todayN.textContent=today.length;todayList.innerHTML=today.slice(0,7).map(x=>`<div class=item><input class=check type=checkbox onchange="toggle('${x.id}')"><div class=grow><b>${esc(x.title)}</b><div><span class=tag>${x.area}</span>${x.time?`<span class=tag>${x.time}</span>`:""}${x.reminder?`<span class="tag high">Alarm</span>`:""}</div></div></div>`).join("")||"<div class=tiny>Your day has breathing room. ✨</div>";let dl=d.apps.filter(x=>x.deadline>=td&&x.deadline<=new Date(Date.now()+14*864e5).toISOString().slice(0,10)&&x.stage!=="Decision");deadN.textContent=dl.length;let mm=new Date().toISOString().slice(0,7),mn=d.focus.filter(x=>x.date.startsWith(mm)).reduce((n,x)=>n+x.minutes,0);mins.textContent=mn>=60?Math.floor(mn/60)+"h":mn+"m";streak.textContent=calcStreak();let nx=[...d.events.map(x=>({title:x.title,date:x.date,t:"Event"})),...d.apps.map(x=>({title:x.name,date:x.deadline,t:"Deadline"}))].filter(x=>x.date>=td).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,6);nextList.innerHTML=nx.map(x=>`<div class=item><div class=grow><b>${esc(x.title)}</b><div><span class=tag>${x.t}</span><span class=tag>${fmt(x.date)}</span></div></div></div>`).join("")||"<div class=tiny>Nothing upcoming.</div>";let q=["Small steps compound. Keep going.","You don't need a perfect day — just an intentional one.","Build the life you want one focused block at a time.","Your future self will thank you for today's quiet work."];quote.textContent="“"+q[new Date().getDate()%q.length]+"”";mood.textContent=mn?"You showed up today. 🌱":"Start small."; if(typeof mascotBubble!=="undefined"){mascotBubble.textContent=today.length>5?"Lots on the plate today — choose one next step. 🌱":today.length?"I’ll help you keep the next step simple. 💛":"Your day has breathing room. Let’s use it well. ✨";}renderTasks();renderCal();renderApps();renderVert();renderFocus();renderGrow();renderWatch();renderPet();renderHabits();name.value=d.settings.name||"";priority.value=d.settings.priority||"Balanced";draft.value=d.draft||"";chars.textContent=draft.value.length+" / 3000"}render();showTimer();
+document.querySelectorAll('#nav button[data-p]').forEach(b=>b.addEventListener('click',()=>page(b.dataset.p)));
+function ambientMood(){const[cls,text]=petMood();setMood(mascot,cls);if(mascotBubble)mascotBubble.textContent=text}
+setInterval(ambientMood,45000);ambientMood();
+
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;const b=document.getElementById('installBtn');if(b)b.style.display='inline-block'});
+async function installCanopy(){if(!deferredInstall){alert('Use your browser menu → Add to Home screen / Install app.');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;const b=document.getElementById('installBtn');if(b)b.style.display='none'}
+if('serviceWorker' in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+window.addEventListener('appinstalled',()=>{const b=document.getElementById('installBtn');if(b)b.style.display='none'});
+async function showCanopyNotification(title,body){if(!("Notification"in window)||Notification.permission!=="granted")return;try{const reg=await navigator.serviceWorker?.ready;if(reg?.showNotification){await reg.showNotification(title,{body,icon:"./icon-192.png",badge:"./icon-192.png",tag:"canopy-reminder",renotify:true});return}new Notification(title,{body})}catch(e){try{new Notification(title,{body})}catch(_){} }}function playReminderAlarm(){try{const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;const ctx=new Ctx();const now=ctx.currentTime;[0,0.22,0.44].forEach((delay,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=i%2?880:660;g.gain.setValueAtTime(0.0001,now+delay);g.gain.exponentialRampToValueAtTime(0.12,now+delay+0.02);g.gain.exponentialRampToValueAtTime(0.0001,now+delay+0.18);o.connect(g);g.connect(ctx.destination);o.start(now+delay);o.stop(now+delay+0.2)});setTimeout(()=>ctx.close(),1000)}catch(_){} }async function checkReminders(){if(!("Notification"in window)||Notification.permission!=="granted")return;const now=new Date(),day=now.toLocaleDateString("en-CA"),hm=now.toTimeString().slice(0,5);const items=[...d.tasks.filter(t=>t.date===day&&!t.done&&t.time===hm).map(t=>({id:t.id,title:t.title,kind:t.reminder?"Reminder":"Task"})),...d.events.filter(e=>e.date===day&&e.time===hm).map(e=>({id:e.id,title:e.title,kind:"Event"})),...d.apps.filter(a=>a.deadline===day&&a.stage!=="Decision"&&(a.alarmTime||"09:00")===hm).map(a=>({id:a.id,title:a.name,kind:"Application deadline"}))];for(const x of items){const key="canopy_local_alarm_"+day+"_"+hm+"_"+x.id;if(localStorage.getItem(key))continue;await showCanopyNotification("Canopy Alarm",`${x.kind}: ${x.title}`);if(document.visibilityState==="visible"){
+  if(typeof window.canopyStartContinuousAlarm==="function"){
+    window.canopyStartContinuousAlarm(x.title, `${x.kind}: ${x.title}`);
+  }else{
+    playReminderAlarm();
+  }
+}localStorage.setItem(key,"1")}}
+setInterval(checkReminders,15000);checkReminders();
+
+/* Cloud reminder backend. The backend is the alarm clock when Canopy is closed. */
+const BACKEND_KEY="canopy_backend_url";let backendUrl=(localStorage.getItem(BACKEND_KEY)||"").replace(/\/+$/,"");
+function backendStatus(s){const el=document.getElementById("backendStatus");if(el)el.textContent=s}
+function hydrateBackendSettings(){const el=document.getElementById("backendUrl");if(el)el.value=backendUrl;backendStatus(backendUrl?"Backend URL saved · reconnect to enable cloud alarms":"Not connected")}
+function backendHeaders(){return {"Content-Type":"application/json"}}
+async function backendFetch(path,opts={}){if(!backendUrl)throw new Error("Backend not configured");return fetch(backendUrl+path,{...opts,headers:{...backendHeaders(),...(opts.headers||{})}})}
+function base64UrlToUint8(s){const pad="=".repeat((4-s.length%4)%4);const b=atob((s+pad).replace(/-/g,"+").replace(/_/g,"/"));return Uint8Array.from(b,c=>c.charCodeAt(0))}
+async function ensurePushSubscription(){if(!("serviceWorker"in navigator)||!("PushManager"in window))throw new Error("Push notifications are not supported by this browser");const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();const cfg=await (await backendFetch("/api/config")).json();if(!cfg.publicKey)throw new Error("Backend did not return a VAPID public key");if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:base64UrlToUint8(cfg.publicKey)});const payload=sub.toJSON();await backendFetch("/api/subscriptions",{method:"POST",body:JSON.stringify({subscription:payload})});return sub}
+async function syncCloudItem(item){if(!backendUrl||!item?.date||!item?.time||!item?.title)return;try{await backendFetch("/api/reminders",{method:"POST",body:JSON.stringify({id:String(item.id),title:String(item.title),date:String(item.date),time:String(item.time),timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,done:Boolean(item.done),kind:item.kind||"Reminder",url:item.url||"./index.html"})})}catch(e){console.warn("Canopy alarm sync failed",e)}}
+async function syncTaskToBackend(t){if(!t?.date||!t?.time){await deleteCloudItem(t?.id);return}await syncCloudItem({...t,kind:t.reminder?"Reminder":"Task"})}
+async function syncEventToBackend(e){if(!e?.date){await deleteCloudItem(e?.id);return}await syncCloudItem({...e,time:e.time||"09:00",kind:"Event"})}
+async function syncApplicationToBackend(a){if(!a?.deadline){await deleteCloudItem(a?.id);return}await syncCloudItem({id:a.id,title:a.name,date:a.deadline,time:a.alarmTime||"09:00",done:a.stage==="Decision",kind:"Application deadline",url:a.url||"./index.html"})}
+async function deleteCloudItem(i){if(!backendUrl)return;try{await backendFetch("/api/reminders/"+encodeURIComponent(i),{method:"DELETE"})}catch(e){console.warn("Canopy alarm delete failed",e)}}
+async function syncAllReminders(){if(!backendUrl)return;for(const t of d.tasks)await syncTaskToBackend(t);for(const e of d.events)await syncEventToBackend(e);for(const a of d.apps)await syncApplicationToBackend(a)}
+async function connectBackend(){const input=document.getElementById("backendUrl"),value=(input?.value||backendUrl||"").trim().replace(/\/+$/,"");if(!value){backendStatus("Enter your backend URL first.");return}backendUrl=value;localStorage.setItem(BACKEND_KEY,backendUrl);backendStatus("Connecting…");try{const r=await backendFetch("/api/health");if(!r.ok)throw new Error("Health check failed");await notify(true);await syncAllReminders();backendStatus("Connected · cloud alarms are active")}catch(e){backendStatus("Connection failed: "+e.message)}}
+function disconnectBackend(){backendUrl="";localStorage.removeItem(BACKEND_KEY);backendStatus("Not connected")}
+async function sendTestPush(){if(!backendUrl){backendStatus("Connect the backend first.");return}backendStatus("Sending test notification…");try{await ensurePushSubscription();const r=await backendFetch("/api/test-push",{method:"POST",body:JSON.stringify({})});const result=await r.json();if(!r.ok)throw new Error(result.error||"Test failed");if(!result.sent)throw new Error("No device subscription is registered yet. Enable notifications first.");backendStatus("Test alarm sent · check your device")}catch(e){backendStatus("Test failed: "+e.message)}}
+async function notify(fromBackend=false){if(!("Notification"in window)){alert("This browser does not support notifications.");return}const p=await Notification.requestPermission();if(p!=="granted"){backendStatus?.("Notifications were not enabled.");return}if(backendUrl&&fromBackend){try{await ensurePushSubscription();backendStatus("Notifications enabled · device registered")}catch(e){backendStatus("Push setup failed: "+e.message);throw e}}else{try{const reg=await navigator.serviceWorker.ready;await reg.showNotification("Canopy alarms enabled",{body:"Canopy can now alert you about scheduled activities.",icon:"./icon-192.png",badge:"./icon-192.png"})}catch(_){} } }
+</script>
+<script>
+/* Prime audio from a user gesture so scheduled alarms can sound while this page remains open. */
+window.addEventListener("pointerdown", () => {
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    if (!window.__canopyAlarmAudio) window.__canopyAlarmAudio = new Ctx();
+    if (window.__canopyAlarmAudio.state === "suspended") window.__canopyAlarmAudio.resume();
+  } catch (_) {}
+}, {once:false, passive:true});
+
+/* Canopy Continuous Alarm Engine */
+(() => {
+  let alarmAudio = null;
+  let alarmTimer = null;
+  let alarmOverlay = null;
+
+  function ensureAlarmUI() {
+    if (alarmOverlay) return alarmOverlay;
+    alarmOverlay = document.createElement("div");
+    alarmOverlay.id = "canopy-continuous-alarm";
+    alarmOverlay.style.cssText =
+      "position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;" +
+      "background:rgba(0,0,0,.92);font-family:system-ui,sans-serif;color:white;text-align:center;padding:24px";
+    alarmOverlay.innerHTML =
+      '<div style="max-width:620px;width:100%;background:#111;border-radius:24px;padding:32px;box-shadow:0 0 60px rgba(255,80,80,.45)">' +
+      '<div style="font-size:56px;margin-bottom:10px">🔔</div>' +
+      '<div style="font-size:18px;opacity:.8">CANOPY ALARM</div>' +
+      '<h1 id="canopy-alarm-title" style="font-size:34px;margin:12px 0"></h1>' +
+      '<p id="canopy-alarm-body" style="font-size:19px;opacity:.9"></p>' +
+      '<button id="canopy-dismiss-alarm" style="font-size:20px;font-weight:700;padding:16px 28px;border:0;border-radius:14px;cursor:pointer">Dismiss alarm</button>' +
+      '</div>';
+    document.body.appendChild(alarmOverlay);
+    alarmOverlay.querySelector("#canopy-dismiss-alarm").onclick = stopAlarm;
+    return alarmOverlay;
+  }
+
+  function beep() {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      if (!alarmAudio) alarmAudio = window.__canopyAlarmAudio || new Ctx();
+      if (alarmAudio.state === "suspended") alarmAudio.resume();
+      const now = alarmAudio.currentTime;
+      const osc = alarmAudio.createOscillator();
+      const gain = alarmAudio.createGain();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.setValueAtTime(660, now + .22);
+      gain.gain.setValueAtTime(.001, now);
+      gain.gain.exponentialRampToValueAtTime(.22, now + .02);
+      gain.gain.exponentialRampToValueAtTime(.001, now + .42);
+      osc.connect(gain).connect(alarmAudio.destination);
+      osc.start(now);
+      osc.stop(now + .44);
+    } catch (_) {}
+  }
+
+  window.canopyStartContinuousAlarm = function(title, body) {
+    const ui = ensureAlarmUI();
+    ui.querySelector("#canopy-alarm-title").textContent = title || "Scheduled activity";
+    ui.querySelector("#canopy-alarm-body").textContent = body || "Your Canopy reminder is due.";
+    ui.style.display = "flex";
+    document.title = "🔔 CANOPY ALARM";
+    if (alarmTimer) clearInterval(alarmTimer);
+    beep();
+    alarmTimer = setInterval(beep, 1000);
+  };
+
+  function stopAlarm() {
+    if (alarmTimer) {
+      clearInterval(alarmTimer);
+      alarmTimer = null;
+    }
+    if (alarmAudio) {
+      try { alarmAudio.close(); } catch (_) {}
+      alarmAudio = null;
+    }
+    if (alarmOverlay) alarmOverlay.style.display = "none";
+    document.title = "Canopy";
+  }
+
+  window.canopyStopContinuousAlarm = stopAlarm;
+
+  // Allow the service worker to wake the page when supported by the browser.
+  navigator.serviceWorker?.addEventListener("message", event => {
+    if (event.data?.type === "CANOPY_ALARM") {
+      window.canopyStartContinuousAlarm(event.data.title, event.data.body);
+    }
+  });
+})();
+</script>
+
+</body></html>
